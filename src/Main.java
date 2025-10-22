@@ -14,18 +14,21 @@ public class Main {
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        List<MenuItem> menuList = new ArrayList<>();
+        menuList.add(new MenuItem("ShackBurger", 6900, "토마토, 양상추, 쉑소스가 토핑된 치즈버거"));
+        menuList.add(new MenuItem("SmokeShack", 8900, "베이컨, 체리 페퍼에 쉑소스가 토핑된 치즈버거"));
+        menuList.add(new MenuItem("Cheeseburger", 6900, "포테이토 번과 비프패티, 치즈가 토핑된 치즈버거"));
+        menuList.add(new MenuItem("Hamburger", 5400, "비프패티를 기반으로 야채가 들어간 기본버거"));
 
-        String menuName = "";
-        int menuPrice = 0;
-        String menuDescription = "";
-
-        List<String> menuList = new ArrayList<>();
+        String menuName;
+        int menuPrice;
+        String menuDescription;
 
         int menuIndex = 0;
         int enteredNum;
 
         //0을 입력받기 전까지 반복 처리
-        while(true){
+        while (true) {
             // 햄버거 메뉴 입력받기
             // 햄버거 메뉴는 햄버거 이름 / 가격 / 설명 으로 이루어져있다.
             // 가격은 원가격에서 1000을 나눈 값으로 명시한다(소수점 한자리까지 표기)
@@ -49,7 +52,7 @@ public class Main {
             }
 
             //입력받은 메뉴 저장하기
-            menuList.add(String.format("%s   | W %.1f | %s", menuName, (double)menuPrice / 1000, menuDescription));
+            menuList.add(new MenuItem(menuName, menuPrice, menuDescription));
 
             //햄버거 메뉴 출력하기
             /**
@@ -61,29 +64,30 @@ public class Main {
              */
             System.out.println("[ SHAKESHACK MENU ]");
             menuIndex = 0;
-            for(String menu : menuList){
+            for(MenuItem menu : menuList){
                 menuIndex++;
-                System.out.printf("%d. %s\n", menuIndex, menu);
+                menu.printMenu(menuIndex);
             }
             System.out.println("0. 종료   | 종료");
 
             //번호 입력받기(0이 입력되면 종료)
-            while(true){
+            while (true) {
                 System.out.print("선택할 메뉴의 번호를 입력해주세요 : ");
-                if(scanner.hasNextInt()){
+                if (scanner.hasNextInt()) {
                     enteredNum = scanner.nextInt();
-                }else{
+                } else {
                     System.out.println("error : 메뉴 번호를 입력해주세요");
+                    scanner.nextLine();
                     continue;
                 }
 
-                if(enteredNum < 0 || enteredNum > menuList.size()) {        //재입력
+                if (enteredNum < 0 || enteredNum > menuList.size()) {        //재입력
                     System.out.println("error : 메뉴 번호를 입력해주세요");
                     continue;
-                }else if(enteredNum == 0){                                  //프로그램 종료
+                } else if (enteredNum == 0){                                 //프로그램 종료
                     System.out.println("프로그램을 종료합니다.");
                     System.exit(0);
-                }else{                                                      //다음 입력으로 넘어감
+                } else{                                                      //다음 입력으로 넘어감
                     System.out.println("\n ----------------------------------------------------\n");
                     scanner.nextLine();
                     break;
