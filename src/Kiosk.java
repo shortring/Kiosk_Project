@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +11,7 @@ import java.util.Scanner;
  */
 public class Kiosk {
     // 속성
-    List<MenuItem> menuList = new ArrayList<>();
+    List<MenuItem> menuList;
 
     //생성자
     public Kiosk(List<MenuItem> menuList) {
@@ -28,7 +27,7 @@ public class Kiosk {
         int menuPrice;
         String menuDescription;
 
-        int menuIndex = 0;
+        int menuIndex;
         int enteredNum;
 
         //0을 입력받기 전까지 반복 처리
@@ -87,7 +86,6 @@ public class Kiosk {
                 scanner.nextLine();
                 if (enteredNum < 0 || enteredNum > menuList.size()) {        //재입력
                     System.out.println("error : 메뉴 번호를 입력해주세요");
-                    continue;
                 } else if (enteredNum == 0){                                 //프로그램 종료
                     System.out.println("프로그램을 종료합니다.");
                     System.exit(0);
