@@ -1,4 +1,4 @@
-import java.util.InputMismatchException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,10 +11,14 @@ import java.util.Scanner;
  */
 public class Kiosk {
     // 속성
-    List<MenuItem> menuList;
+    List<Menu> menuList;
+
+    Menu selectedMenu;
+    MenuItem selectedMenuItem;
 
     //생성자
-    public Kiosk(List<MenuItem> menuList) {
+    Kiosk(List<Menu> menuList) {
+        this.menuList = new ArrayList<>();
         this.menuList = menuList;
     }
 
@@ -23,79 +27,95 @@ public class Kiosk {
 
         Scanner scanner = new Scanner(System.in);
 
-        String menuName;
-        int menuPrice;
-        String menuDescription;
-
-        int menuIndex;
-        int enteredNum;
+        int menuIndex = 0;
 
         //0을 입력받기 전까지 반복 처리
         while (true) {
-            // 햄버거 메뉴 입력받기
-            // 햄버거 메뉴는 햄버거 이름 / 가격 / 설명 으로 이루어져있다.
-            // 가격은 원가격에서 1000을 나눈 값으로 명시한다(소수점 한자리까지 표기)
-            try{
-                System.out.print("메뉴를 입력해주세요 : ");
-                menuName = scanner.nextLine();
+            /**
+             * 1. 카테고리 리스트 출력하기
+             * 2. 상위 카테고리 번호 입력받기
+             * 3. 선택받은 상위 카테고리에 해당하는 하위 메뉴를 출력
+             * 4. 하위메뉴를 선택하면
+             *    선택한 메뉴: 메뉴 이름 | W 금액 | 설명
+             *    의 형태로 출력된다.
+             */
 
-                System.out.print("가격을 입력해주세요 : ");
-                if(scanner.hasNextInt()){
-                    menuPrice = scanner.nextInt();
+            // 1. 카테고리 리스트 출력하기
+            System.out.println("\n\n[ MAIN MENU ]");
+            int index = 0;
+            for (Category category : Category.values()) {
+                index++;
+                System.out.printf("%d. %s\n", index, category.getCategory());
+            }
+            System.out.println("0. 종료      | 종료");
+
+            // 2. 상위 카테고리 번호 입력받기
+            while(true){
+                System.out.print("메뉴를 입력해주세요 : ");
+
+                if (scanner.hasNextInt()) {
+                    menuIndex = scanner.nextInt();
+
+                    if (menuIndex < 0 || menuIndex > menuList.size()) {
+                        System.out.println("error : 메뉴를 입력해 주세요");
+                        scanner.nextLine(); //남은 버퍼 처리
+                        continue;
+                    }else if (menuIndex == 0) {
+                        System.out.println("프로그램을 종료합니다.");
+                        System.exit(0);
+                        break;
+                    }
                 }else{
-                    throw new InputMismatchException("error : 숫자만 입력해주세요");
+                    System.out.println("error : 메뉴를 입력해 주세요");
+                    scanner.nextLine(); //남은 버퍼 처리
+                    continue;
                 }
-                scanner.nextLine();
-                System.out.print("설명을 입력해주세요 : ");
-                menuDescription = scanner.nextLine();
-                System.out.println("\n");
-            } catch(InputMismatchException e){
-                System.out.println(e.getMessage());
+
+                scanner.nextLine(); //남은 버퍼 처리
                 break;
             }
 
-            //입력받은 메뉴 저장하기
-            menuList.add(new MenuItem(menuName, menuPrice, menuDescription));
-
-            //햄버거 메뉴 출력하기
-            /**
-             * [ SHAKESHACK MENU ]
-             * 인덱스(메뉴 번호). 메뉴 이름   | W 햄버거 가격 | 설명
-             * 0. 종료   | 종료
-             * 의 형태로 출력한다.
-             * 만약 0을 입력받을 시 프로그램을 종료합니다 문구가 뜨며 종료된다.
-             */
-            System.out.println("[ SHAKESHACK MENU ]");
-            menuIndex = 0;
-            for(MenuItem menu : menuList){
-                menuIndex++;
-                menu.printMenu(menuIndex);
+            // 3. 선택받은 상위 카테고리에 해당하는 하위 메뉴를 출력
+            for (Menu menu : menuList) {
+                if (menu.getCategory().equals(Category.values()[menuIndex - 1])) {
+                    selectedMenu = menu;
+                }
             }
-            System.out.println("0. 종료   | 종료");
+            selectedMenu.printMenuList();
 
-            //번호 입력받기(0이 입력되면 종료)
+            // 4. 하위메뉴를 선택
+            //    메뉴를 선택하면
+            //    선택한 메뉴: 메뉴 이름 | W 금액 | 설명
+            //    의 형태로 출력된다.
+            int selectedNum = 0;
+
             while (true) {
-                System.out.print("선택할 메뉴의 번호를 입력해주세요 : ");
+                System.out.print("메뉴를 선택해주세요 : ");
+
                 if (scanner.hasNextInt()) {
-                    enteredNum = scanner.nextInt();
-                } else {
-                    System.out.println("error : 메뉴 번호를 입력해주세요");
-                    scanner.nextLine();
+                    selectedNum = scanner.nextInt();
+
+                    if (selectedNum < 0 || selectedNum > menuList.size()) {
+                        System.out.println("error : 메뉴 번호를 입력해 주세요");
+                        scanner.nextLine(); //남은 버퍼 처리
+                        continue;
+                    }
+                }else{
+                    System.out.println("error : 메뉴 번호를 입력해 주세요");
                     continue;
                 }
-                scanner.nextLine();
-                if (enteredNum < 0 || enteredNum > menuList.size()) {        //재입력
-                    System.out.println("error : 메뉴 번호를 입력해주세요");
-                } else if (enteredNum == 0){                                 //프로그램 종료
-                    System.out.println("프로그램을 종료합니다.");
-                    System.exit(0);
-                } else{                                                      //다음 입력으로 넘어감
-                    System.out.println("\n ----------------------------------------------------\n");
-                    scanner.nextLine();
-                    break;
-                }
+                break;
+            }
+
+            // 0을 입력하면 뒤로가기
+            // 메뉴 번호를 입력하면 선택한 메뉴를 출력하기
+            if(selectedNum == 0) {
+                scanner.nextLine(); //남은 버퍼 처리
+                continue;
+            }else {
+                selectedMenuItem = selectedMenu.getMenuItem(selectedNum - 1);
+                System.out.printf("선택한 메뉴: %s | W %f | %s\n", selectedMenuItem.getMenuName(), (double)selectedMenuItem.getMenuPrice() / 1000, selectedMenuItem.getMenuDescription());
             }
         }
-        scanner.close();
     }
 }

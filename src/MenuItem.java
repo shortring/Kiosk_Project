@@ -2,7 +2,6 @@
  * 햄버거 메뉴는 MenuItem과 리스트로 관리한다
  * 1. 햄버거 메뉴는 이름 , 가격, 설명을 가진다
  */
-import java.util.List;
 
 public class MenuItem {
     // 속성
@@ -18,7 +17,15 @@ public class MenuItem {
     }
 
     // 기능
-    void printMenu(int menuIndex) {
-        System.out.printf("%d. %s   | W %.1f | %s\n", menuIndex, menuName, (double)menuPrice / 1000, menuDescription);
+    String getMenuName() {
+        return menuName;
+    }
+
+    int getMenuPrice() {
+        return menuPrice;
+    }
+
+    String getMenuDescription() {
+        return menuDescription;
     }
 }
