@@ -5,9 +5,9 @@
 
 public class MenuItem {
     // 속성
-    String menuName;
-    int menuPrice;
-    String menuDescription;
+    private final String menuName;
+    private final int menuPrice;
+    private final String menuDescription;
 
     // 생성자
     MenuItem(String menuName, int menuPrice, String menuDescription) {

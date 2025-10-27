@@ -7,33 +7,24 @@ import java.util.List;
  */
 public class Menu {
     // 속성
-    List<MenuItem> menuItemList;
-    Category category;
+    private final List<MenuItem> menuItemList;
+    private final Category category;
 
     // 생성자
-    public Menu(List<MenuItem> menuList, Category category) {
-        this.menuItemList = menuList;
+    public Menu(Category category, List<MenuItem> menuItemList) {
+        this.menuItemList = menuItemList;
         this.category = category;
     }
 
     // 기능
-    // 카테고리 하위 메뉴 출력
-    void printMenuList() {
-        int menuIndex = 0;
-
-        System.out.println("\n\n[ SHAKESHACK MENU ]");
-
-        for (MenuItem menuItem : menuItemList) {
-            menuIndex++;
-            System.out.printf("%d. %s   | W %.1f | %s\n", menuIndex, menuItem.getMenuName(), (double)menuItem.getMenuPrice() / 1000, menuItem.getMenuDescription());
-        }
-
-        System.out.println("0. 뒤로가기");
-    }
-
     // 카테고리 Getter
     Category getCategory() {
         return category;
+    }
+
+    // MenuItem리스트 Getter
+    List<MenuItem> getMenuItemList() {
+        return menuItemList;
     }
 
     // 입력 받은 메뉴를 출력
