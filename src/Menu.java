@@ -36,6 +36,11 @@ public class Menu {
         return category;
     }
 
+    // MenuItem리스트 Getter
+    List<MenuItem> getMenuItemList() {
+        return menuItemList;
+    }
+
     // 입력 받은 메뉴를 출력
     // 선택한 메뉴: 메뉴 이름 | W 금액 | 설명 의 형태로 출력
     MenuItem getMenuItem(int index) {

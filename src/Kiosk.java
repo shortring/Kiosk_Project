@@ -95,7 +95,7 @@ public class Kiosk {
                 if (scanner.hasNextInt()) {
                     selectedNum = scanner.nextInt();
 
-                    if (selectedNum < 0 || selectedNum > menuList.size()) {
+                    if (selectedNum < 0 || selectedNum > selectedMenu.getMenuItemList().size()) {
                         System.out.println("error : 메뉴 번호를 입력해 주세요");
                         scanner.nextLine(); //남은 버퍼 처리
                         continue;
