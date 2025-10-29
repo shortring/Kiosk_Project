@@ -87,7 +87,16 @@ public class Kiosk {
                 selectedNumber = selectMenuNumber();
 
                 if (selectedNumber == 1) {  // 주문 완료, 장바구니 초기화 후 메인 메뉴로 이동
-                    System.out.printf("주문이 완료되었습니다. 금액은 W %.1f 입니다.\n", shoppingBasket.getTotalPrice() / 1000);
+                    // 할인 정보 출력
+                    System.out.println("할인 정보를 입력해주세요.");
+                    System.out.printf("1. 국가유공자 :\t%d%%\n", (int)(100 * Discount.NATIONAL_MERIT.getDiscountValue()));
+                    System.out.printf("2. 군인 \t:\t%d%%\n", (int)(100 * Discount.SOLDIER.getDiscountValue()));
+                    System.out.printf("3. 학생 \t:\t%d%%\n", (int)(100 * Discount.STUDENT.getDiscountValue()));
+                    System.out.printf("4. 일반 \t:\t%d%%\n", (int)(100 * Discount.NORMAL.getDiscountValue()));
+
+                    // 할인 정보 입력
+                    double discountPrice = selectAndDiscountPrice();
+                    System.out.printf("주문이 완료되었습니다. 금액은 W %.1f 입니다.\n", discountPrice / 1000);
                     shoppingBasket.clearBasket();
                     isCheckingOrder = false;
                     continue MAINLABEL;
@@ -196,5 +205,36 @@ public class Kiosk {
         }
 
         System.out.println("0. 뒤로가기");
+    }
+
+    // 할인 선택 및 할인된 금액 반환
+    private double selectAndDiscountPrice() {
+        double discountPrice = 0;
+        Integer num = null;
+
+        while (num == null) {
+            num = selectMenuNumber();
+
+            switch (num) {
+                case 1:
+                    discountPrice = shoppingBasket.getTotalPrice() * (1 - Discount.NATIONAL_MERIT.getDiscountValue());
+                    break;
+                case 2:
+                    discountPrice = shoppingBasket.getTotalPrice() * (1 - Discount.SOLDIER.getDiscountValue());
+                    break;
+                case 3:
+                    discountPrice = shoppingBasket.getTotalPrice() * (1 - Discount.STUDENT.getDiscountValue());
+                    break;
+                case 4:
+                    discountPrice = shoppingBasket.getTotalPrice() * (1 - Discount.NORMAL.getDiscountValue());
+                    break;
+                default:
+                    System.out.println("error : 메뉴 번호를 정확히 입력해주세요");
+                    num = null;
+                    break;
+            }
+        }
+
+        return discountPrice;
     }
 }
