@@ -26,7 +26,9 @@ public class ShoppingBasket {
         double totalPrice = 0;
 
         for (BasketData basketData : basketDataList) {
-            totalPrice += basketData.getMenuItem().getMenuPrice();
+            int basketDataPrice = basketData.getMenuItem()
+                                            .getMenuPrice();
+            totalPrice += basketDataPrice * basketData.getOrderCount();
         }
 
         return totalPrice;

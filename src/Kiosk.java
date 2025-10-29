@@ -61,7 +61,7 @@ public class Kiosk {
                     // 장바구니에 담긴 상품 리스트 출력
                     for(BasketData basketData : shoppingBasket.getBasketDataList()) {
                         MenuItem menuItem = basketData.getMenuItem();
-                        System.out.printf("%s | W %.1f | %s\n", menuItem.getMenuName(), (double)menuItem.getMenuPrice() / 1000, menuItem.getMenuDescription());
+                        System.out.printf("X%d %s | W %.1f | %s\n", basketData.getOrderCount(),menuItem.getMenuName(), (double)menuItem.getMenuPrice() / 1000, menuItem.getMenuDescription());
                     }
 
                     System.out.println("\n[ Total ]");
@@ -89,14 +89,14 @@ public class Kiosk {
                 if (selectedNumber == 1) {  // 주문 완료, 장바구니 초기화 후 메인 메뉴로 이동
                     // 할인 정보 출력
                     System.out.println("할인 정보를 입력해주세요.");
-                    System.out.printf("1. 국가유공자 :\t%d%%\n", (int)(100 * Discount.NATIONAL_MERIT.getDiscountValue()));
-                    System.out.printf("2. 군인 \t:\t%d%%\n", (int)(100 * Discount.SOLDIER.getDiscountValue()));
-                    System.out.printf("3. 학생 \t:\t%d%%\n", (int)(100 * Discount.STUDENT.getDiscountValue()));
-                    System.out.printf("4. 일반 \t:\t%d%%\n", (int)(100 * Discount.NORMAL.getDiscountValue()));
+                    System.out.println("1. 국가유공자 :\t" + (int)(100 * Discount.NATIONAL_MERIT.getDiscountValue()) + "%");
+                    System.out.println("2. 군인 \t:\t" + (int)(100 * Discount.SOLDIER.getDiscountValue()) + "%");
+                    System.out.println("3. 학생 \t:\t" + (int)(100 * Discount.STUDENT.getDiscountValue()) + "%");
+                    System.out.println("4. 일반 \t:\t" + (int)(100 * Discount.NORMAL.getDiscountValue()) + "%");
 
                     // 할인 정보 입력
                     double discountPrice = selectAndDiscountPrice();
-                    System.out.printf("주문이 완료되었습니다. 금액은 W %.1f 입니다.\n", discountPrice / 1000);
+                    System.out.printf("주문이 완료되었습니다. 금액은 W %.2f 입니다.\n", discountPrice / 1000);
                     shoppingBasket.clearBasket();
                     isCheckingOrder = false;
                     continue MAINLABEL;
@@ -162,12 +162,14 @@ public class Kiosk {
 
                 if (selectedNumber == 1) {
                     // 장바구니에 상품 추가 후 메인 메뉴로 이동
-                    System.out.printf("%s 이 장바구니에 추가되었습니다.\n", selectedMenuItem.getMenuName());
                     shoppingBasket.addMenuItem(selectedMenuItem);
+
+                    System.out.printf("%s 이 장바구니에 추가되었습니다.\n", selectedMenuItem.getMenuName());
+
                     break;
                 } else if (selectedNumber == 2) {
                     // 메인메뉴로 이동
-                    continue MAINLABEL;
+                    break MAINLABEL;
                 } else {
                     // 에러 출력 -> 재입력
                     System.out.println("error : 번호를 정확히 입력해주세요");
