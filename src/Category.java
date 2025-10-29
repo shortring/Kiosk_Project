@@ -10,9 +10,4 @@ public enum Category {
     Category(String category) {
         this.category = category;
     }
-
-    //기능
-    public String getCategory() {
-        return category;
-    }
 }

@@ -49,12 +49,15 @@ public class MenuManager {
 
     // 기능
     // 카테고리 리스트 반환
-    public List<Menu> getCategoryMenuList() {
+    public List<Menu> getMenuList() {
         return menuList;
     }
 
     // 선택한 카테고리의 하위 메뉴 반환
-    public Menu getMenuList(Category category) {
-        return menuList.stream().filter(menu -> menu.getCategory().equals(category)).findFirst().get();
+    public Menu getMenu(Category category) {        //네이밍 신경쓰기
+        return menuList.stream().filter(menu -> menu.getCategory()
+                                                        .equals(category))
+                                                        .findFirst()
+                                                        .get();
     }
 }
