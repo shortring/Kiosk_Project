@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 /**
  * 프로그램의 메뉴를 관리하고 사용자 입력을 처리하는 클래스
@@ -59,10 +61,10 @@ public class Kiosk {
                     System.out.println("아래와 같이 주문 하시겠습니까?");
                     System.out.println("[ Orders ]");
                     // 장바구니에 담긴 상품 리스트 출력
-                    for(BasketData basketData : shoppingBasket.getBasketDataList()) {
-                        MenuItem menuItem = basketData.getMenuItem();
-                        System.out.printf("X%d %s | W %.1f | %s\n", basketData.getOrderCount(),menuItem.getMenuName(), (double)menuItem.getMenuPrice() / 1000, menuItem.getMenuDescription());
-                    }
+                    shoppingBasket.getBasketDataList().stream()
+                            .forEach(basketData -> {
+                                System.out.printf("X%d %s | W %.1f | %s\n", basketData.getOrderCount(), basketData.getMenuItem().getMenuName(), (double) basketData.getMenuItem().getMenuPrice() / 1000, basketData.getMenuItem().getMenuDescription());
+                            });
 
                     System.out.println("\n[ Total ]");
                     System.out.println("W " + shoppingBasket.getTotalPrice() / 1000);
@@ -70,8 +72,23 @@ public class Kiosk {
                     isCheckingOrder = true;
                     break;
                 } else if (selectedNumber == 5) {   // 장바구니 삭제 후 메인메뉴로 이동
-                    shoppingBasket.clearBasket();
-                    continue MAINLABEL;
+                    System.out.println("장바구니에서 지울 상품의 이름을 입력해주세요");
+                    shoppingBasket.getBasketDataList().stream()
+                            .forEach(basketData -> {
+                                System.out.printf("X%d %s | W %.1f | %s\n", basketData.getOrderCount(), basketData.getMenuItem().getMenuName(), (double) basketData.getMenuItem().getMenuPrice() / 1000, basketData.getMenuItem().getMenuDescription());
+                            });
+                    scanner.nextLine();
+                    String removeMenuName;
+                    while (true) {
+                        try {
+                            removeMenuName = scanner.nextLine();
+                            shoppingBasket.removeBasketData(removeMenuName);
+                            System.out.println(removeMenuName + "이 삭제되었습니다.");
+                            continue MAINLABEL;
+                        } catch (Exception e) {
+                            System.out.println("error : 메뉴이름을 정확히 입력해주세요");
+                        }
+                    }
                 } else if (selectedNumber >= 0 && selectedNumber < 4 ) {
                     // 메뉴 입력 파트로 이동
                     isCheckingOrder = false;
@@ -123,7 +140,17 @@ public class Kiosk {
                     // 메뉴 아이템 리스트 출력
                     selectedMenu = menuManager.getMenuList()
                                                 .get(selectedNumber - 1);
-                    printMenuItemList(selectedMenu);
+                    //printMenuItemList(selectedMenu);
+                    System.out.println("\n\n[ SHAKESHACK MENU ]");
+
+                    AtomicInteger menuIndex = new AtomicInteger(1);
+                    selectedMenu.getMenuItemList()
+                                .stream()
+                                .forEach(menuItem -> {
+                                    int mIndex = menuIndex.getAndIncrement();
+                                    System.out.printf("%d. %s   | W %.1f | %s\n", mIndex, menuItem.getMenuName(), (double)menuItem.getMenuPrice() / 1000, menuItem.getMenuDescription());
+                                });
+                    System.out.println("0. 뒤로가기");
                     break;
                 } else {
                     // 오류, 재입력
@@ -169,7 +196,7 @@ public class Kiosk {
                     break;
                 } else if (selectedNumber == 2) {
                     // 메인메뉴로 이동
-                    break MAINLABEL;
+                    continue MAINLABEL;
                 } else {
                     // 에러 출력 -> 재입력
                     System.out.println("error : 번호를 정확히 입력해주세요");

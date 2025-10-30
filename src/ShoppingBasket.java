@@ -39,6 +39,22 @@ public class ShoppingBasket {
         basketDataList.clear();
     }
 
+    // 장바구니 상품 선택 삭제
+    public void removeBasketData(String menuName) {
+        // 장바구니에서 지울 상품 선택
+        BasketData basketData = basketDataList.stream()
+                                            .filter(data -> data.getMenuName()
+                                                                        .equalsIgnoreCase(menuName))
+                                            .findFirst()
+                                            .get();
+        // 상품 삭제
+        if(basketData.getOrderCount() > 1) {
+            basketData.minusOrderCount();
+        } else {
+            basketDataList.remove(basketData);
+        }
+    }
+
     // 장바구니에 물건 추가하기
     public void addMenuItem(MenuItem menuItem) {
         boolean dataExist = false;
