@@ -1,4 +1,4 @@
-키오스 프로젝트
+키오스크 프로젝트
 
 해당 프로젝트는 스파르타클럽의 내일배움캠프에서 진행하는 과제용 프로젝트입니다.
 
@@ -27,6 +27,7 @@ Challenge_LV2
 
 
 트러블 슈팅 및 해당 과제를 수행하며 공부한 것들을 작성한 TIL블로그 링크
+
 https://blog.naver.com/shortring/224058117155
 
 https://blog.naver.com/shortring/224056933691
